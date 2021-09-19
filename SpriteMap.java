@@ -9,6 +9,8 @@ public class SpriteMap
     public static BufferedImage topRightWall;
     public static BufferedImage topWall;
     public static BufferedImage bottomWall;
+    public static BufferedImage spiderTop;
+    public static BufferedImage spiderBottom;
     public static void init()
     {
       try
@@ -20,6 +22,8 @@ public class SpriteMap
             topLeftWall = ImageIO.read(Pictures.load("topLeftWallCorner.png"));
             topWall = ImageIO.read(Pictures.load("topWall.png"));
             bottomWall = ImageIO.read(Pictures.load("bottomWall.png"));
+            spiderTop = ImageIO.read(Pictures.load("spiderTop.png"));
+            spiderBottom = ImageIO.read(Pictures.load("spiderBottom.png"));
         }
         catch(Exception e)
         {

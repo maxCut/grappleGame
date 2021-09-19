@@ -26,8 +26,8 @@ public class GrapplingHook implements Collidable
     {
         c.addCollidable(this);
         playerMovement = m;
-        hookX = playerMovement.getX();
-        hookY = playerMovement.getY();
+        hookX = playerMovement.getCenterX();
+        hookY = playerMovement.getCenterY();
     }
     public void launch(MouseEvent e)
     {
@@ -39,8 +39,8 @@ public class GrapplingHook implements Collidable
         }
         launched = true;
         launchedImune = true;
-        double targetX = e.getX()/Scale.SCALE - playerMovement.getX();
-        double targetY = e.getY()/Scale.SCALE - playerMovement.getY();
+        double targetX = e.getX()/Scale.SCALE - playerMovement.getCenterX();
+        double targetY = e.getY()/Scale.SCALE - playerMovement.getCenterY();
         double r = LAUNCHFORCE/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
         xVelocity = r*targetX;
         yVelocity = r*targetY;
@@ -53,8 +53,8 @@ public class GrapplingHook implements Collidable
         {
             if(launched)
             {
-                double targetX = hookX - playerMovement.getX();
-                double targetY = hookY - playerMovement.getY();
+                double targetX = hookX - playerMovement.getCenterX();
+                double targetY = hookY - playerMovement.getCenterY();
                 double r = ACCELFORCE/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
                 double xAccel= r*targetX;
                 double yAccel= r*targetY;
@@ -72,14 +72,24 @@ public class GrapplingHook implements Collidable
     {
        if(!launched)
        {
-           hookX = playerMovement.getX();
-           hookY = playerMovement.getY();
+           hookX = playerMovement.getCenterX();
+           hookY = playerMovement.getCenterY();
        }
        hookX+=xVelocity;
        hookY+=yVelocity;
        xVelocity+=xAcceleration;
        yVelocity+=yAcceleration;
+       if(launched)
+       {
+        playerMovement.setAngle(getAngle());
+       }
     }
+
+    private double getAngle()
+    {
+        return -Math.atan2(hookX-playerMovement.getCenterX(),hookY-playerMovement.getCenterY());
+    }
+
     public void mouseClicked(MouseEvent e)
     {
         if(e.getButton()==1)
@@ -96,8 +106,6 @@ public class GrapplingHook implements Collidable
         }
         else
         {
-
-            System.out.println(e);
         } 
     }
     public void mouseReleased(MouseEvent e)
@@ -111,10 +119,10 @@ public class GrapplingHook implements Collidable
     {
         if(launched)
         {
-            g.drawOval((int)((hookX-elipseRadius)*Scale.SCALE),(int)((hookY-elipseRadius)*Scale.SCALE)
+            g.fillOval((int)((hookX-elipseRadius)*Scale.SCALE),(int)((hookY-elipseRadius)*Scale.SCALE)
                 ,(int)(2*elipseRadius*Scale.SCALE),(int)(2*elipseRadius*Scale.SCALE));
-            g.drawLine((int)(playerMovement.getX()*Scale.SCALE)
-                ,(int)(playerMovement.getY()*Scale.SCALE)
+            g.drawLine((int)(playerMovement.getCenterX()*Scale.SCALE)
+                ,(int)(playerMovement.getCenterY()*Scale.SCALE)
                 ,(int)(hookX*Scale.SCALE)
                 ,(int)(hookY*Scale.SCALE));
         }

@@ -13,16 +13,29 @@ public class Movement
     private double yVelocity = 0;
     private double xAcceleration = 0;
     private double yAcceleration = 0;
+
+    private SpiderBody spiderBody;
     
     private final double BOUNCE = .2;
     private final int MOVEDISTANCE = 1;
 
-    public Movement(int x, int y, int w, int h)
+    public Movement(int x, int y, int w, int h,SpiderBody s)
     {
         width = w;
         height = h;
         xCord = x;
         yCord = y;
+        spiderBody = s; 
+    }
+
+    public double getCenterX()
+    {
+        return spiderBody.getCenterX();
+    }
+
+    public double getCenterY()
+    {
+        return spiderBody.getCenterY();
     }
     
     public int getX()
@@ -47,6 +60,12 @@ public class Movement
         yCord += yVelocity;
         xVelocity += xAcceleration;
         yVelocity += yAcceleration;
+        spiderBody.moveTo(xCord,yCord);
+    }
+
+    public void setAngle(double a)
+    {
+        spiderBody.setAngle(a);
     }
 
     public void collision(Collidable c)

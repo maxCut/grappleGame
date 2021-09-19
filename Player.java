@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.awt.geom.Ellipse2D;
 import java.awt.*;
 /**
  * Write a description of class Player here.
@@ -14,11 +15,13 @@ public class Player implements Collidable
     private final double BOUNCE = .2;
     private final int width;
     private final int height;
+    private SpiderBody spiderBody;
     public Player(CollisionDetector c)
     {
         width = 20;
         height = 36;
-        location = new Movement(260,260,width,height);
+        spiderBody = new SpiderBody(width,height,260,260);
+        location = new Movement(260,260,width,height,spiderBody);
         facing = Direction.Up;
         c.addCollidable(this);
     }
@@ -31,19 +34,17 @@ public class Player implements Collidable
     public void update()
     {
         location.update();
+        spiderBody.update();
     }
 
     public void draw(Graphics g)
     {
-        g.fillRect((int)(location.getX()*Scale.SCALE),
-                (int)(location.getY()*Scale.SCALE),
-                (int)(width*Scale.SCALE),
-                (int)(height*Scale.SCALE));
-        
+        spiderBody.draw(g);
     }
     public Shape getBoundries()
     {
-        return new Rectangle(location.getX(),location.getY(),20,36);
+        int elipseRadius = 12;
+        return new Ellipse2D.Double(location.getX()-elipseRadius,location.getY()-elipseRadius,2*elipseRadius,2*elipseRadius);
     }
     public void onIntersection(Collidable c)
     {
