@@ -5,13 +5,19 @@ import java.util.ArrayList;
 public class Room
 {
     private ArrayList<Wall> walls = new ArrayList<>(); 
-    private ArrayList<FloorTile> floor= new ArrayList<>(); 
-    public Room(CollisionDetector c)
+    private ArrayList<FloorTile> floor = new ArrayList<>(); 
+    private ArrayList<Monster> monsters = new ArrayList<>(); 
+    private CollisionDetector collisionDetector;
+    private Movement playerMovement;
+    public Room(CollisionDetector c, Movement mo)
     {
         int height = 10;
         int width = 20;
         int xCord = 0;
         int yCord = 0;
+        collisionDetector = c;
+        playerMovement = mo;
+
         walls.add(new TopLeftWall(xCord,yCord));
         xCord += 40;
         for(int i = 0; i<width; i++)
@@ -36,6 +42,8 @@ public class Room
             yCord+=40;
         }
         
+        monsters.add(new Pot(500,200));
+
         for(int i = 0; i<width+2; i++)
         {
             walls.add(new BottomWall(xCord,yCord));
@@ -45,7 +53,31 @@ public class Room
         for(Wall wall:walls)
         {
             c.addCollidable(wall);
+        }
 
+        for(Monster m: monsters)
+        {
+            c.addCollidable(m);
+        }
+    }
+
+    public void update()
+    {
+        for(int i = 0; i<monsters.size();i++)
+        {
+            Monster m = monsters.get(i);
+            m.update();
+            if(!m.isAlive())
+            {
+                monsters.remove(m);
+                collisionDetector.removeCollidable(m);
+            }
+            if((m instanceof Pot) && ((Pot)m).trySpawnBubble())
+            {
+                Monster newMonster = new BallBeam(m.getX()+m.width/2,m.getY()+m.height/2,playerMovement);
+                monsters.add(newMonster);
+                collisionDetector.addCollidable(newMonster);
+            }
         }
     }
 
@@ -58,6 +90,10 @@ public class Room
         for(FloorTile f:floor)
         {
            f.draw(g); 
+        }
+        for(Monster m:monsters)
+        {
+            m.draw(g);
         }
     }
 }

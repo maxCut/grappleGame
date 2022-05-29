@@ -12,6 +12,6 @@ public class TopLeftWall extends Wall
     }
     public Shape getBoundries()
     {
-        return new Rectangle((int)xCord,(int)yCord,(int)width,(int)(height-30));
+        return new Rectangle((int)xCord-20,(int)yCord,(int)width+40,(int)(height-30));
     }
 }

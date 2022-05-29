@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JComponent;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -30,11 +31,11 @@ public class World extends JComponent
     static World start = new World();   //this is the recursively defined object of the game itself. 
     static Map<TileType, BufferedImage> world = new HashMap<TileType, BufferedImage>();//way of storing image mem adresses
     static JFrame frame = new JFrame();
-    static InputManager input;
     static Room room;
     static Player player;
     static GrapplingHook grapplingHook;
     static CollisionDetector collisionDetector;
+
     public World()
     {
         addMouseListener(new MouseAdapter()
@@ -48,21 +49,19 @@ public class World extends JComponent
                 grapplingHook.mouseReleased(e);
             }
         });
+        
     }
     public static void main(String[] args) throws IOException
     {
         
         SpriteMap.init();
-        input = new InputManager();
         collisionDetector = new CollisionDetector();
-        room = new Room(collisionDetector);
         frame.setBackground(Color.black);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //jframe settings
         frame.add(start);
         frame.setVisible(true);
         frame.setSize((int)(880*Scale.SCALE),(int)(560*Scale.SCALE));
-        frame.addKeyListener(input);
 
         long lastLoopTime = System.nanoTime();
         final int TARGET_FPS = 120;
@@ -71,8 +70,39 @@ public class World extends JComponent
         long gameTime = 0;
 
         player = new Player(collisionDetector);
+        room = new Room(collisionDetector,player.getMovement());
         grapplingHook = new GrapplingHook(player.getMovement(),collisionDetector);
-        
+
+        CameraShift.setPlayer(player.getMovement());
+        CameraShift.setFrameDims(840,480);
+
+        frame.addKeyListener(new KeyAdapter()
+                {
+                    boolean swordButtonReady = true;
+                    public void keyPressed(KeyEvent e)
+                    {
+                        if(e.getKeyCode() == KeyEvent.VK_SPACE)
+                        {
+                            if(swordButtonReady)
+                            {
+                                player.swingSword();
+                                swordButtonReady = false;
+                            }
+                        }
+
+                    }
+
+                    public void keyReleased(KeyEvent e)
+                    {
+                        if(e.getKeyCode() == KeyEvent.VK_SPACE)
+                        {
+                            swordButtonReady = true;
+                        }
+                    }
+
+
+                });
+
         while(true)
         {
             long now = System.nanoTime();
@@ -97,14 +127,29 @@ public class World extends JComponent
     }
 
     private static void update() {
+        if(player.isDead())
+        {
+            return;
+        }
         grapplingHook.update();
         player.update();
+        room.update();
         collisionDetector.checkCollisions();
     }
     public void paintComponent(Graphics g)
     {
-        room.draw(g);
-        player.draw(g);
-        grapplingHook.draw(g);
+        if(player.isDead())
+        {
+            //g.drawText(0,0,"Game Over");
+
+        }
+        else
+        {
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.translate((int)((CameraShift.getXShift())*Scale.SCALE),(int)((CameraShift.getYShift())*Scale.SCALE));
+            room.draw(g);
+            player.draw(g);
+            grapplingHook.draw(g);
+        }
     }
 }

@@ -68,6 +68,11 @@ public class Movement
         spiderBody.setAngle(a);
     }
 
+    public double getAngle()
+    {
+        return spiderBody.getAngle();
+    }
+
     public void collision(Collidable c)
     {
             setAcceleration(0,0);

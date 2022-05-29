@@ -11,6 +11,8 @@ public class SpriteMap
     public static BufferedImage bottomWall;
     public static BufferedImage spiderTop;
     public static BufferedImage spiderBottom;
+    public static BufferedImage sword;
+    public static BufferedImage pot;
     public static void init()
     {
       try
@@ -24,6 +26,8 @@ public class SpriteMap
             bottomWall = ImageIO.read(Pictures.load("bottomWall.png"));
             spiderTop = ImageIO.read(Pictures.load("spiderTop.png"));
             spiderBottom = ImageIO.read(Pictures.load("spiderBottom.png"));
+            sword = ImageIO.read(Pictures.load("sword.png"));
+            pot = ImageIO.read(Pictures.load("pot.png"));
         }
         catch(Exception e)
         {

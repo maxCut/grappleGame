@@ -56,6 +56,12 @@ public class SpiderBody
     {
         goalAngle = a;
     }
+
+    public double getAngle()
+    {
+        return angle;
+    }
+
     public double getCenterX()
     {
         double xShift = Math.cos(angle+Math.PI/2)*height/2;

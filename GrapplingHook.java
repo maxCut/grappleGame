@@ -39,8 +39,8 @@ public class GrapplingHook implements Collidable
         }
         launched = true;
         launchedImune = true;
-        double targetX = e.getX()/Scale.SCALE - playerMovement.getCenterX();
-        double targetY = e.getY()/Scale.SCALE - playerMovement.getCenterY();
+        double targetX = e.getX()/Scale.SCALE - playerMovement.getCenterX()-CameraShift.getXShift();
+        double targetY = e.getY()/Scale.SCALE - playerMovement.getCenterY()-CameraShift.getYShift();
         double r = LAUNCHFORCE/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
         xVelocity = r*targetX;
         yVelocity = r*targetY;

@@ -12,6 +12,6 @@ public class RightWall extends Wall
     }
     public Shape getBoundries()
     {
-        return new Rectangle((int)(xCord+20),(int)yCord,(int)(width-20),(int)(height));
+        return new Rectangle((int)(xCord+20),(int)yCord-30,(int)(width-20),(int)(height)+60);
     }
 }

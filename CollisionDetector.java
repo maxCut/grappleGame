@@ -6,6 +6,11 @@ public class CollisionDetector
     {
         collidables.add(c);
     }
+
+    public void removeCollidable(Collidable c)
+    {
+        collidables.remove(c);
+    }
     public void checkCollisions()
     {
         for(int i = 0; i<collidables.size()-1;i++)
