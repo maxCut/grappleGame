@@ -17,7 +17,7 @@ public class Pot extends Monster
         if(spawnTimer>=SPAWNTIME)
         {
             spawnTimer = 0;
-            spawnBubble = true;
+            //spawnBubble = true;
         }
     }
     public boolean trySpawnBubble()

@@ -17,7 +17,7 @@ public class Movement
     private SpiderBody spiderBody;
     
     private final double BOUNCE = .2;
-    private final int MOVEDISTANCE = 1;
+    private final double MAX_VELOCITY = .8;
 
     public Movement(int x, int y, int w, int h,SpiderBody s)
     {
@@ -54,6 +54,11 @@ public class Movement
         yAcceleration = y;
     }
 
+    public void setVelocity(double x, double y)
+    {
+        xVelocity = x;
+        yVelocity = y;
+    }
     public void update()
     {
         xCord += xVelocity;

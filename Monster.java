@@ -16,7 +16,7 @@ public abstract class Monster implements Collidable
 
     public void draw(Graphics g)
     {
-        g.drawImage(sprite,(int)(Scale.SCALE*xCord),(int)(Scale.SCALE*yCord),(int)(Scale.SCALE*width),(int)(Scale.SCALE*height),null);
+        g.drawImage(sprite,CameraShift.xShift(xCord),CameraShift.yShift(yCord),(int)(Scale.WORLDSCALE*width),(int)(Scale.WORLDSCALE*height),null);
     }
     public Shape getBoundries()
     {

@@ -1,5 +1,6 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.lang.Math.*;
 import java.awt.Shape;
@@ -18,8 +19,8 @@ public class GrapplingHook implements Collidable
     private boolean launched = false;
     private boolean latched = false;
     private boolean pulling = false;
-    private final double ACCELFORCE = .03;
-    private final double LAUNCHFORCE = 6.9;
+    private final double ACCELFORCE = .04;
+    private final double LAUNCHFORCE = 7.9;
     private final double elipseRadius = 10.0;
     
     public GrapplingHook(Movement m, CollisionDetector c)
@@ -39,8 +40,12 @@ public class GrapplingHook implements Collidable
         }
         launched = true;
         launchedImune = true;
+
+
         double targetX = e.getX()/Scale.SCALE - playerMovement.getCenterX()-CameraShift.getXShift();
         double targetY = e.getY()/Scale.SCALE - playerMovement.getCenterY()-CameraShift.getYShift();
+
+
         double r = LAUNCHFORCE/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
         xVelocity = r*targetX;
         yVelocity = r*targetY;
@@ -87,7 +92,8 @@ public class GrapplingHook implements Collidable
 
     private double getAngle()
     {
-        return -Math.atan2(hookX-playerMovement.getCenterX(),hookY-playerMovement.getCenterY());
+        return Math.atan2(playerMovement.getCenterX()-hookX,hookY-playerMovement.getCenterY());
+        //since we go from top left of screen with pixels we have to reverse that here. So we use hookY - player (everything is flipped along y axis)
     }
 
     public void mouseClicked(MouseEvent e)
@@ -119,12 +125,18 @@ public class GrapplingHook implements Collidable
     {
         if(launched)
         {
-            g.fillOval((int)((hookX-elipseRadius)*Scale.SCALE),(int)((hookY-elipseRadius)*Scale.SCALE)
-                ,(int)(2*elipseRadius*Scale.SCALE),(int)(2*elipseRadius*Scale.SCALE));
-            g.drawLine((int)(playerMovement.getCenterX()*Scale.SCALE)
-                ,(int)(playerMovement.getCenterY()*Scale.SCALE)
-                ,(int)(hookX*Scale.SCALE)
-                ,(int)(hookY*Scale.SCALE));
+            /*
+            g.setColor(Color.GREEN);
+            g.fillOval(CameraShift.xShift((playerMovement.getCenterX()-elipseRadius)),CameraShift.yShift((playerMovement.getCenterY()-elipseRadius))
+                ,(int)(2*elipseRadius*Scale.WORLDSCALE),(int)(2*elipseRadius*Scale.WORLDSCALE));
+             */
+            g.setColor(Color.BLACK);
+            g.fillOval(CameraShift.xShift((hookX-elipseRadius)),CameraShift.yShift((hookY-elipseRadius))
+                ,(int)(2*elipseRadius*Scale.WORLDSCALE),(int)(2*elipseRadius*Scale.WORLDSCALE));
+            g.drawLine(CameraShift.xShift(playerMovement.getCenterX())
+                ,CameraShift.yShift(playerMovement.getCenterY())
+                ,CameraShift.xShift(hookX)
+                ,CameraShift.yShift(hookY));
         }
     }
     

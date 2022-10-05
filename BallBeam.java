@@ -31,8 +31,8 @@ public class BallBeam extends Monster
     public void draw(Graphics g)
     {
         g.setColor(Color.GREEN);
-        g.fillOval((int)((xCord-elipseRadius)*Scale.SCALE),(int)((yCord-elipseRadius)*Scale.SCALE)
-                ,(int)(2*elipseRadius*Scale.SCALE),(int)(2*elipseRadius*Scale.SCALE));
+        g.fillOval(CameraShift.xShift((xCord-elipseRadius)*Scale.WORLDSCALE),CameraShift.yShift((yCord-elipseRadius)*Scale.WORLDSCALE)
+                ,(int)(2*elipseRadius*Scale.WORLDSCALE),(int)(2*elipseRadius*Scale.WORLDSCALE));
         g.setColor(Color.BLACK);
 
     }

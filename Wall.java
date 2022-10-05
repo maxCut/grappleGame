@@ -11,7 +11,7 @@ public abstract class Wall implements Collidable
     public BufferedImage sprite;
     public void draw(Graphics g)
     {
-        g.drawImage(sprite,(int)(xCord*Scale.SCALE),(int)(yCord*Scale.SCALE),(int)(width*Scale.SCALE),(int)(height*Scale.SCALE),null);
+        g.drawImage(sprite,CameraShift.xShift(xCord),CameraShift.yShift(yCord),(int)(width*Scale.WORLDSCALE),(int)(height*Scale.WORLDSCALE),null);
     }
     public Shape getBoundries()
     {

@@ -49,16 +49,17 @@ public class Sword implements Collidable
         double yCord = movement.getCenterY();
         double drawAngle = angle + movement.getAngle();
         Graphics2D g2d = (Graphics2D)g;
-        g2d.translate((int)(xCord*Scale.SCALE),(int)(yCord*Scale.SCALE));
+        g2d.translate(CameraShift.xShift(xCord),CameraShift.yShift(yCord));
+        //g2d.translate((int)(xCord*Scale.WORLDSCALE),(int)(yCord*Scale.WORLDSCALE));
         g2d.rotate(drawAngle);
-        g2d.translate((int)(xShift*Scale.SCALE),(int)(yShift*Scale.SCALE));
+        g2d.translate((int)(xShift*Scale.WORLDSCALE),(int)(yShift*Scale.WORLDSCALE));
 
         g2d.drawImage(SpriteMap.sword,0,0
-                ,(int)(width*Scale.SCALE),(int)(height*Scale.SCALE),null);
+                ,(int)(width*Scale.WORLDSCALE),(int)(height*Scale.WORLDSCALE),null);
 
-        g2d.translate((int)(-xShift*Scale.SCALE),(int)(-yShift*Scale.SCALE));
+        g2d.translate((int)(-xShift*Scale.WORLDSCALE),(int)(-yShift*Scale.WORLDSCALE));
         g2d.rotate(-drawAngle);
-        g2d.translate((int)(-xCord*Scale.SCALE),(int)(-yCord*Scale.SCALE));
+        g2d.translate(-CameraShift.xShift(xCord),-CameraShift.yShift(yCord));
 
     }
 

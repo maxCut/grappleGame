@@ -22,10 +22,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.image.*;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.geom.AffineTransform;
 public class World extends JComponent
 {
     static World start = new World();   //this is the recursively defined object of the game itself. 
@@ -61,12 +63,11 @@ public class World extends JComponent
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //jframe settings
         frame.add(start);
         frame.setVisible(true);
-        frame.setSize((int)(880*Scale.SCALE),(int)(560*Scale.SCALE));
+        frame.setSize((int)(880*Scale.WORLDSCALE),(int)(560*Scale.WORLDSCALE));
 
         long lastLoopTime = System.nanoTime();
-        final int TARGET_FPS = 120;
+        final int TARGET_FPS = 80;
         final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
-        long lastFpsTime = 0;
         long gameTime = 0;
 
         player = new Player(collisionDetector);
@@ -106,19 +107,14 @@ public class World extends JComponent
         while(true)
         {
             long now = System.nanoTime();
-            long updateLength = now - lastLoopTime;
             lastLoopTime = now;
-            double delta = updateLength / ((double)OPTIMAL_TIME);
 
-            lastFpsTime += updateLength;
-            lastFpsTime %= 1000000000;
 
             update();
             frame.repaint();
             try
             {
-                gameTime = (lastLoopTime - System.nanoTime() + OPTIMAL_TIME) / 1000000;
-
+                gameTime = (OPTIMAL_TIME - (lastLoopTime - System.nanoTime()))/1000000;
                 Thread.sleep(gameTime);//gives time aspect so that it doesnt repaint every second
             } 
             catch(Exception e)
@@ -138,6 +134,7 @@ public class World extends JComponent
     }
     public void paintComponent(Graphics g)
     {
+        super.paintComponent(g);
         if(player.isDead())
         {
             //g.drawText(0,0,"Game Over");
@@ -146,10 +143,15 @@ public class World extends JComponent
         else
         {
             Graphics2D g2d = (Graphics2D)g;
-            g2d.translate((int)((CameraShift.getXShift())*Scale.SCALE),(int)((CameraShift.getYShift())*Scale.SCALE));
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);   
+    
+            g2d.scale(Scale.SCALE/Scale.WORLDSCALE, Scale.SCALE/Scale.WORLDSCALE);
+            //g2d.translate((int)((CameraShift.getXShift())*Scale.WORLDSCALE),(int)((CameraShift.getYShift())*Scale.WORLDSCALE));
             room.draw(g);
             player.draw(g);
             grapplingHook.draw(g);
+            g2d.scale(Scale.WORLDSCALE/Scale.SCALE, Scale.WORLDSCALE/Scale.SCALE);
         }
     }
 }

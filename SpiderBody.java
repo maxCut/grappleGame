@@ -6,8 +6,6 @@ public class SpiderBody
 {
     private double angle;
     private double goalAngle;
-    private SpiderLegSet leftLegs; //not really left and right its a pair of 2 on the left one on the right and vice versa
-    private SpiderLegSet rightLegs;
     private double xCord = 0;
     private double yCord = 0;
     private final int width;
@@ -45,6 +43,7 @@ public class SpiderBody
         {
             angle+=ROTSPEED;
         }
+        angle+=2*Math.PI;
         angle%=2*Math.PI;
     }
     public void moveTo(double x,double y)
@@ -64,37 +63,51 @@ public class SpiderBody
 
     public double getCenterX()
     {
-        double xShift = Math.cos(angle+Math.PI/2)*height/2;
-        return xCord+xShift;
+        double xShift = Math.cos(angle+Math.PI/2)*width/2;
+        //System.out.println(xShift);
+        return xCord;//+xShift;
     }
     public double getCenterY()
     {
         double yShift = Math.sin(angle+Math.PI/2)*height/2;
-        return yCord+yShift;
+        return yCord;//+yShift;
     }
-    private double getTopShift()
+    private double getTopShiftY()
     {
-        return Math.cos(angle)*-3;
+        return (Math.cos(angle)*-2.5)-1.3;
+        //0 is 100 
+        //90 is 50
+        //180 is 0
+        //270 is 50
+    }
+    private double getTopShiftX()
+    {
+        return (Math.sin(angle)*2.0);
+        //0 is 0 
+        //90 is -50
+        //180 is 50
+        //270 is 0
     }
 
     public void draw(Graphics g)
     {
         Graphics2D g2d = (Graphics2D)g;
-        g2d.translate((int)(xCord*Scale.SCALE),(int)(yCord*Scale.SCALE));
+        g2d.translate(CameraShift.xShift(xCord),CameraShift.yShift(yCord));
         g2d.rotate(angle);
-        g2d.translate((int)(-width/2*Scale.SCALE),(int)(-height/2*Scale.SCALE));
+        g2d.translate((int)(-width/2*Scale.WORLDSCALE),(int)(-height/2*Scale.WORLDSCALE));
         g2d.drawImage(SpriteMap.spiderBottom,0,0
-                ,(int)(width*Scale.SCALE),(int)(height*Scale.SCALE),null);
-        g2d.translate((int)(width/2*Scale.SCALE),(int)(height/2*Scale.SCALE));
+                ,(int)(width*Scale.WORLDSCALE),(int)(height*Scale.WORLDSCALE),null);
+        g2d.translate((int)(width/2*Scale.WORLDSCALE),(int)(height/2*Scale.WORLDSCALE));
         g2d.rotate(-angle);
-        g2d.translate(0,(int)(getTopShift()*Scale.SCALE));
+        g2d.translate((int)(getTopShiftX()*Scale.WORLDSCALE),(int)(getTopShiftY()*Scale.WORLDSCALE));
         g2d.rotate(angle);
-        g2d.translate((int)(-width/2*Scale.SCALE),(int)(-height/2*Scale.SCALE));
+        g2d.translate((int)(-width/2*Scale.WORLDSCALE),(int)(-height/2*Scale.WORLDSCALE));
         g2d.drawImage(SpriteMap.spiderTop,0,0
-                ,(int)(width*Scale.SCALE),(int)(height*Scale.SCALE),null);
-        g2d.translate((int)(width/2*Scale.SCALE),(int)(height/2*Scale.SCALE));
+                ,(int)(width*Scale.WORLDSCALE),(int)(height*Scale.WORLDSCALE),null);
+        g2d.translate((int)(width/2*Scale.WORLDSCALE),(int)(height/2*Scale.WORLDSCALE));
         g2d.rotate(-angle);
-        g2d.translate(0,(int)(-getTopShift()*Scale.SCALE));
-        g2d.translate((int)(-xCord*Scale.SCALE),(int)(-yCord*Scale.SCALE));
+        g2d.translate((int)(-getTopShiftX()*Scale.WORLDSCALE),(int)(-getTopShiftY()*Scale.WORLDSCALE));
+        //g2d.translate((int)(-xCord*Scale.WORLDSCALE),(int)(-yCord*Scale.WORLDSCALE));
+        g2d.translate(-CameraShift.xShift(xCord),-CameraShift.yShift(yCord));
     }
 }

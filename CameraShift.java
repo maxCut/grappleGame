@@ -30,4 +30,13 @@ public class CameraShift
         }
         return frameHeight/2 - playerMovement.getCenterY();
     }
+    
+    public static int xShift(double x)
+    {
+        return (int)((x+getXShift())*Scale.WORLDSCALE);
+    }
+    public static int yShift(double y)
+    {
+        return (int)((y+getYShift())*Scale.WORLDSCALE);
+    }
 }
