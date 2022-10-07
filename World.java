@@ -66,15 +66,19 @@ public class World extends JComponent
         frame.setSize((int)(880*Scale.WORLDSCALE),(int)(560*Scale.WORLDSCALE));
 
         long lastLoopTime = System.nanoTime();
-        final int TARGET_FPS = 80;
+        final int TARGET_FPS = 60;
+        final int TARGET_UPDATES_PER_SECOND = 120;
         final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;
+
         long gameTime = 0;
+        int updateMod = 0;
 
         player = new Player(collisionDetector);
         room = new Room(collisionDetector,player.getMovement());
         grapplingHook = new GrapplingHook(player.getMovement(),collisionDetector);
 
         CameraShift.setPlayer(player.getMovement());
+        CameraShift.setGrapple(grapplingHook);
         CameraShift.setFrameDims(840,480);
 
         frame.addKeyListener(new KeyAdapter()
@@ -104,14 +108,21 @@ public class World extends JComponent
 
                 });
 
+
+        
+        update();
         while(true)
         {
             long now = System.nanoTime();
             lastLoopTime = now;
 
-
-            update();
             frame.repaint();
+            int needed_updates = (TARGET_UPDATES_PER_SECOND+updateMod)/TARGET_FPS;
+            updateMod = (TARGET_UPDATES_PER_SECOND+updateMod)%TARGET_FPS;
+            for(int i = 0; i<needed_updates;i++ )
+            {
+                update();
+            }
             try
             {
                 gameTime = (OPTIMAL_TIME - (lastLoopTime - System.nanoTime()))/1000000;
@@ -143,14 +154,12 @@ public class World extends JComponent
         else
         {
             Graphics2D g2d = (Graphics2D)g;
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);   
     
             g2d.scale(Scale.SCALE/Scale.WORLDSCALE, Scale.SCALE/Scale.WORLDSCALE);
             //g2d.translate((int)((CameraShift.getXShift())*Scale.WORLDSCALE),(int)((CameraShift.getYShift())*Scale.WORLDSCALE));
             room.draw(g);
-            player.draw(g);
             grapplingHook.draw(g);
+            player.draw(g);
             g2d.scale(Scale.WORLDSCALE/Scale.SCALE, Scale.WORLDSCALE/Scale.SCALE);
         }
     }

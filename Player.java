@@ -17,6 +17,7 @@ public class Player implements Collidable
     private final int height;
     private int health = 3;
     private SpiderBody spiderBody;
+    private SpiderLegMovement spiderLegs;
     public Player(CollisionDetector c)
     {
         width = 20;
@@ -24,6 +25,7 @@ public class Player implements Collidable
         spiderBody = new SpiderBody(width,height,260,260);
         location = new Movement(260,260,width,height,spiderBody);
         sword = new Sword(location);
+        spiderLegs = new SpiderLegMovement(.7*height/2, .6*width/2, height, width, location);
         c.addCollidable(this);
         c.addCollidable(sword);
     }
@@ -38,6 +40,7 @@ public class Player implements Collidable
         location.update();
         spiderBody.update();
         sword.update();
+        spiderLegs.update();
     }
 
     public void swingSword()
@@ -47,6 +50,8 @@ public class Player implements Collidable
 
     public void draw(Graphics g)
     {
+        spiderLegs.drawLeftLegs(g);
+        spiderLegs.drawRightLegs(g);
         spiderBody.draw(g);
         sword.draw(g);
     }

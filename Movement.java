@@ -59,6 +59,17 @@ public class Movement
         xVelocity = x;
         yVelocity = y;
     }
+
+    public double getVelocityX()
+    {
+        return xVelocity;
+    }
+
+    public double getVelocityY()
+    {
+        return yVelocity;
+    }
+
     public void update()
     {
         xCord += xVelocity;

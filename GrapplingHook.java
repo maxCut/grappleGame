@@ -19,7 +19,7 @@ public class GrapplingHook implements Collidable
     private boolean launched = false;
     private boolean latched = false;
     private boolean pulling = false;
-    private final double ACCELFORCE = .04;
+    private final double ACCELFORCE = .03;
     private final double LAUNCHFORCE = 7.9;
     private final double elipseRadius = 10.0;
     
@@ -29,6 +29,14 @@ public class GrapplingHook implements Collidable
         playerMovement = m;
         hookX = playerMovement.getCenterX();
         hookY = playerMovement.getCenterY();
+    }
+    public double getHookX()
+    {
+        return hookX;
+    }
+    public double getHookY()
+    {
+        return hookY;
     }
     public void launch(MouseEvent e)
     {
