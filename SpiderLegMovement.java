@@ -2,7 +2,7 @@ import java.awt.Graphics;
 public class SpiderLegMovement
 {
     final double SWITCH_DIST = 18.0;
-    final double SWITCH_ANGLE = Math.PI*2*.12;
+    final double SWITCH_ANGLE = Math.PI*2*.03;
     private SpiderLegSet leftLegs; //not really left and right its a pair of 2 on the left one on the right and vice versa
     private SpiderLegSet rightLegs;
     double bodyCenterX = 0;

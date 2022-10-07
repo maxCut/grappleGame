@@ -142,6 +142,7 @@ public class World extends JComponent
         player.update();
         room.update();
         collisionDetector.checkCollisions();
+        CameraShift.update();
     }
     public void paintComponent(Graphics g)
     {

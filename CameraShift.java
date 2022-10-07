@@ -8,7 +8,7 @@ public class CameraShift
     private static double cameraY = 0;
     private static double targetX = 0;
     private static double targetY = 0;
-    private static final double CAMERAVELOCITY = .2;
+    private static final double CAMERAVELOCITY = 3.2;
     public static void setPlayer(Movement m)
     {
         playerMovement = m; 
@@ -29,16 +29,29 @@ public class CameraShift
     {
         targetX = (playerMovement.getCenterX() + grapplingHook.getHookX())/2;
         targetY = (playerMovement.getCenterY() + grapplingHook.getHookY())/2;
-        double xDiff = cameraX - targetX;
-        double yDiff = cameraY - targetY;
+        double xDiff = targetX -cameraX;
+        double yDiff = targetY - cameraY;
         
-        double r = CAMERAVELOCITY/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
-        double xVelocity = r*targetX;
-        double yVelocity = r*targetY;
+        double r = CAMERAVELOCITY/Math.sqrt(Math.pow(xDiff,2)+Math.pow(yDiff,2));
+        double xVelocity = r*xDiff;
+        double yVelocity = r*yDiff;
         
-       cameraX+=xVelocity;
-       cameraY+=yVelocity;
-
+       if(Math.abs(xDiff)<CAMERAVELOCITY)
+       {
+        cameraX = targetX;
+       }
+       else
+       {
+        cameraX+=xVelocity;
+       }
+        
+       if(Math.abs(yDiff)<CAMERAVELOCITY)
+       {
+        cameraY = targetY;
+       }
+       else{
+        cameraY += yVelocity;
+       }
     }
     public static double getXShift()
     {
