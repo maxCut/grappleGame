@@ -1,6 +1,6 @@
 public class Pot extends Monster
 {
-    private final int SPAWNTIME = 500;
+    private final int SPAWNTIME = 10;
     private int spawnTimer = 0;
     private boolean spawnBubble = false;
     public Pot(int x, int y)
@@ -17,7 +17,7 @@ public class Pot extends Monster
         if(spawnTimer>=SPAWNTIME)
         {
             spawnTimer = 0;
-            //spawnBubble = true;
+            spawnBubble = true;
         }
     }
     public boolean trySpawnBubble()

@@ -20,7 +20,7 @@ public class GrapplingHook implements Collidable
     private boolean latched = false;
     private boolean pulling = false;
     private final double ACCELFORCE = .03;
-    private final double LAUNCHFORCE = 7.9;
+    private final double LAUNCHFORCE = 13.9;
     private final double elipseRadius = 10.0;
     
     public GrapplingHook(Movement m, CollisionDetector c)
@@ -50,8 +50,8 @@ public class GrapplingHook implements Collidable
         launchedImune = true;
 
 
-        double targetX = e.getX()/Scale.SCALE - playerMovement.getCenterX()-CameraShift.getXShift();
-        double targetY = e.getY()/Scale.SCALE - playerMovement.getCenterY()-CameraShift.getYShift();
+        double targetX = e.getX()/Scale.getScale() - playerMovement.getCenterX()-CameraShift.getXShift();
+        double targetY = e.getY()/Scale.getScale() - playerMovement.getCenterY()-CameraShift.getYShift();
 
 
         double r = LAUNCHFORCE/Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));

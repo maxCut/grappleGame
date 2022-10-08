@@ -8,6 +8,7 @@ import java.awt.*;
  * @author (your name) 
  * @version (a version number or a date)
  */
+
 public class Player implements Collidable
 {
     private Movement location;
@@ -16,6 +17,7 @@ public class Player implements Collidable
     private final int width;
     private final int height;
     private int health = 3;
+    private int iframes = 0;
     private SpiderBody spiderBody;
     private SpiderLegMovement spiderLegs;
     public Player(CollisionDetector c)
@@ -41,6 +43,10 @@ public class Player implements Collidable
         spiderBody.update();
         sword.update();
         spiderLegs.update();
+        if(iframes>0)
+        {
+            iframes--;
+        }
     }
 
     public void swingSword()
@@ -68,8 +74,13 @@ public class Player implements Collidable
         }
         else if(c instanceof Monster)
         {
+            if(iframes>0)
+            {
+                return;
+            }
             if(health>0)
-                health--;//TODO add some immunity
+                health--;//TODO add some 
+                iframes = 120;
         }
     }
     public boolean isDead()

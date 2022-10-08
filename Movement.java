@@ -17,7 +17,7 @@ public class Movement
     private SpiderBody spiderBody;
     
     private final double BOUNCE = .2;
-    private final double MAX_VELOCITY = .8;
+    private final double MAX_VELOCITY = 2.8;
 
     public Movement(int x, int y, int w, int h,SpiderBody s)
     {
@@ -28,6 +28,14 @@ public class Movement
         spiderBody = s; 
     }
 
+    public double getWidth()
+    {
+        return width;
+    }
+    public double getHeight()
+    {
+        return height;
+    }
     public double getCenterX()
     {
         return spiderBody.getCenterX();
@@ -54,10 +62,20 @@ public class Movement
         yAcceleration = y;
     }
 
-    public void setVelocity(double x, double y)
+    private void setVelocityUpdate(double xAccel, double yAccel)
     {
-        xVelocity = x;
-        yVelocity = y;
+        if(xAccel == 0 && yAccel == 0)
+        {
+            return;
+        }
+        double targetX = xVelocity+xAccel; 
+        double targetY = yVelocity+yAccel;
+        
+        double r = Math.sqrt(Math.pow(targetX,2)+Math.pow(targetY,2));
+        double velSum = Math.min(r,MAX_VELOCITY);
+
+        xVelocity = targetX*(velSum/r);
+        yVelocity = targetY*(velSum/r);
     }
 
     public double getVelocityX()
@@ -74,8 +92,7 @@ public class Movement
     {
         xCord += xVelocity;
         yCord += yVelocity;
-        xVelocity += xAcceleration;
-        yVelocity += yAcceleration;
+        setVelocityUpdate( xAcceleration, yAcceleration);
         spiderBody.moveTo(xCord,yCord);
     }
 
@@ -104,6 +121,13 @@ public class Movement
                 xCord-=xVelocity;
                 yCord-=yVelocity;
                 xVelocity = -1.0*xVelocity*BOUNCE;
+            }
+            else if(c instanceof Wall)
+            {
+                xCord-=xVelocity;
+                yCord-=yVelocity;
+                xVelocity = -1.0*xVelocity*BOUNCE;
+                yVelocity = -1.0*yVelocity*BOUNCE;
             }
     }
 }

@@ -156,12 +156,13 @@ public class World extends JComponent
         {
             Graphics2D g2d = (Graphics2D)g;
     
-            g2d.scale(Scale.SCALE/Scale.WORLDSCALE, Scale.SCALE/Scale.WORLDSCALE);
+            g2d.scale(Scale.getScale()/Scale.WORLDSCALE, Scale.getScale()/Scale.WORLDSCALE);
             //g2d.translate((int)((CameraShift.getXShift())*Scale.WORLDSCALE),(int)((CameraShift.getYShift())*Scale.WORLDSCALE));
             room.draw(g);
             grapplingHook.draw(g);
             player.draw(g);
-            g2d.scale(Scale.WORLDSCALE/Scale.SCALE, Scale.WORLDSCALE/Scale.SCALE);
+            g2d.scale(Scale.WORLDSCALE/Scale.getScale(), Scale.WORLDSCALE/Scale.getScale());
         }
+        g.dispose();
     }
 }

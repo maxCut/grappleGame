@@ -8,7 +8,11 @@ public class CameraShift
     private static double cameraY = 0;
     private static double targetX = 0;
     private static double targetY = 0;
-    private static final double CAMERAVELOCITY = 3.2;
+    private static final double CAMERAVELOCITY = 8.2;
+    private static double zoomEffect = 1.0;
+    private static double targetZoom = 0;
+    private static final double ZOOMVELOCITY = .1;
+    private static final double MAXZOOM = 1.0;
     public static void setPlayer(Movement m)
     {
         playerMovement = m; 
@@ -52,6 +56,14 @@ public class CameraShift
        else{
         cameraY += yVelocity;
        }
+
+       double requiredZoomValueX = (Math.abs(playerMovement.getCenterX() - cameraX)+playerMovement.getWidth()*2.2)/(frameWidth/2);
+       double requiredZoomValueY = (Math.abs(playerMovement.getCenterY() - cameraY)+playerMovement.getHeight()*2.2)/(frameHeight/2);
+       zoomEffect = Math.max(Math.max(requiredZoomValueX, requiredZoomValueY), MAXZOOM);
+    }
+    public static double getZoomEffect()
+    {
+        return zoomEffect;
     }
     public static double getXShift()
     {
@@ -59,7 +71,7 @@ public class CameraShift
         {
             return 0;
         }
-        return frameWidth/2 - cameraX;
+        return frameWidth*zoomEffect/2 - cameraX;
     }
 
     public static double getYShift()
@@ -68,7 +80,7 @@ public class CameraShift
         {
             return 0;
         }
-        return frameHeight/2 - cameraY;
+        return frameHeight*zoomEffect/2 - cameraY;
     }
     
     public static int xShift(double x)
